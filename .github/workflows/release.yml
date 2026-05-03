@@ -19,11 +19,22 @@ jobs:
         run: |
           pip install pygame pyinstaller
 
+      - name: Build icon.icns
+        run: |
+          mkdir -p src/media/icon.iconset
+          for size in 16 32 64 128 256 512; do
+            sips -z $size $size src/media/icon.png --out "src/media/icon.iconset/icon_${size}x${size}.png"
+            double=$((size * 2))
+            sips -z $double $double src/media/icon.png --out "src/media/icon.iconset/icon_${size}x${size}@2x.png"
+          done
+          iconutil -c icns src/media/icon.iconset --output src/media/icon.icns
+
       - name: Build app bundle
         run: |
           pyinstaller \
             --name BattleshipGame \
             --windowed \
+            --icon src/media/icon.icns \
             --paths src \
             --add-data "src/media:media" \
             src/main.py
@@ -54,13 +65,24 @@ jobs:
           python-version: "3.12"
 
       - name: Install dependencies
-        run: pip install pygame pyinstaller
+        run: pip install pygame pyinstaller pillow
+
+      - name: Build icon.ico
+        run: |
+          python -c "
+          from PIL import Image
+          img = Image.open('src/media/icon.png').convert('RGBA')
+          sizes = [(16,16),(32,32),(48,48),(64,64),(128,128),(256,256)]
+          imgs = [img.resize(s, Image.LANCZOS) for s in sizes]
+          imgs[0].save('src/media/icon.ico', format='ICO', append_images=imgs[1:])
+          "
 
       - name: Build exe
         run: |
           pyinstaller `
             --name BattleshipGame `
             --windowed `
+            --icon src/media/icon.ico `
             --paths src `
             --add-data "src/media;media" `
             src/main.py
@@ -97,6 +119,7 @@ jobs:
           pyinstaller \
             --name BattleshipGame \
             --windowed \
+            --icon src/media/icon.png \
             --paths src \
             --add-data "src/media:media" \
             src/main.py
