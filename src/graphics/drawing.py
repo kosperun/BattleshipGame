@@ -1,5 +1,8 @@
 """Module for drawing."""
 
+import os
+import sys
+
 import pygame
 
 from elements.constants import (
@@ -14,11 +17,14 @@ from elements.constants import (
     WHITE,
 )
 
+# Resolve asset base dir: use PyInstaller's unpacked dir when frozen, else src/
+_BASE_DIR = getattr(sys, "_MEIPASS", os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 pygame.init()
 screen = pygame.display.set_mode(SIZE)
 pygame.display.set_caption("BattleShip")
 try:
-    icon = pygame.image.load("media/BattleShip.png")
+    icon = pygame.image.load(os.path.join(_BASE_DIR, "media", "BattleShip.png"))
     pygame.display.set_icon(icon)
 except FileNotFoundError:
     print("Warning: media/BattleShip.png not found — window icon not set.")
