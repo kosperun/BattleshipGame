@@ -57,8 +57,6 @@ from graphics.drawing import (
 )
 from graphics.manual_ships import manually_create_new_ship
 
-pygame.init()
-
 
 def main():
     """
@@ -75,6 +73,7 @@ def main():
     computer_turn = False
     start = (0, 0)
     ship_size = (0, 0)
+    x_start, y_start = 0, 0
 
     human_ships_to_draw = []
     human_ships_set = set()
@@ -265,8 +264,6 @@ def main():
                 hit_blocks.clear()
                 dotted_set.clear()
                 destroyed_computer_ships.clear()
-                dotted_set.clear()
-                hit_blocks.clear()
                 main()
             elif event.type == pygame.MOUSEBUTTONDOWN and quit_game_button.rect.collidepoint(mouse):
                 pygame.quit()

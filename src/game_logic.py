@@ -213,8 +213,8 @@ def update_dotted_and_hit_sets(
     """
     global dotted_set, hit_blocks
     x, y = fired_block
-    a = 15 * computer_turn
-    b = 11 + 15 * computer_turn
+    x_min = 15 * computer_turn
+    x_max = 11 + 15 * computer_turn
     # Adds a block hit by computer to the set of his hits to later remove
     # them from the set of blocks available for it to shoot from
     hit_blocks_for_computer_not_to_shoot.add(fired_block)
@@ -223,7 +223,7 @@ def update_dotted_and_hit_sets(
     # Adds blocks in diagonal or all-around a block to respective sets
     for i in range(-1, 2):
         for j in range(-1, 2):
-            if (not diagonal_only or i != 0 and j != 0) and a < x + i < b and 0 < y + j < 11:
+            if (not diagonal_only or (i != 0 and j != 0)) and x_min < x + i < x_max and 0 < y + j < 11:
                 add_missed_block_to_dotted_set(fired_block=(x + i, y + j))
     dotted_set -= hit_blocks
 

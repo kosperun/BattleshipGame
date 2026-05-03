@@ -12,9 +12,6 @@ from elements.constants import (
 from game_logic import is_ship_valid, update_used_blocks, validate_ships_numbers
 from graphics.drawing import screen, show_message_at_rect_center
 
-pygame.init()
-
-
 def manually_create_new_ship(
     *,
     human_ships_to_draw,

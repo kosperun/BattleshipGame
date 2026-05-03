@@ -7,9 +7,6 @@ import pygame
 from elements.constants import BLACK, BLOCK_SIZE, GREEN_BLUE, UPPER_MARGIN, WHITE
 from graphics.drawing import screen
 
-pygame.init()
-
-
 class Button:
     """
     Creates buttons and prints explanatory message for them
