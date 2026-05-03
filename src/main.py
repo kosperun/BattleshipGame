@@ -67,6 +67,7 @@ def main():
     drawing = False
     game_over = False
     computer_turn = False
+    computer_just_fired = False
     start = (0, 0)
     ship_size = (0, 0)
     x_start, y_start = 0, 0
@@ -195,8 +196,6 @@ def main():
                         computer=computer,
                     )
 
-                    draw_from_dotted_set(state.dotted_set)
-                    draw_hit_blocks(state.hit_blocks)
                     screen.fill(WHITE, MESSAGE_RECT_COMPUTER)
                     show_message_at_rect_center(
                         f"Your last shot: {LETTERS[fired_block[0]-1] + str(fired_block[1])}",
@@ -216,7 +215,6 @@ def main():
                 computer=computer,
             )
 
-            draw_computer_shot_with_highlight(fired_block, state.dotted_set, state.hit_blocks)
             screen.fill(WHITE, MESSAGE_RECT_HUMAN)
             show_message_at_rect_center(
                 f"Computer's last shot: {LETTERS[fired_block[0] - 16] + str(fired_block[1])}",
@@ -224,6 +222,10 @@ def main():
             )
         draw_ships(state.destroyed_computer_ships)
         draw_ships(human_ships_to_draw)
+        draw_from_dotted_set(state.dotted_set)
+        draw_hit_blocks(state.hit_blocks)
+        if computer_turn:
+            draw_computer_shot_with_highlight(fired_block, state.dotted_set, state.hit_blocks)
 
         if not computer.ships_set:
             show_message_at_rect_center("YOU WIN!", (0, 0, SIZE[0], SIZE[1]), game_over_font)

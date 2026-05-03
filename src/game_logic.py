@@ -126,10 +126,10 @@ def update_destroyed_ships(
     Adds all blocks in a ship to hit_blocks set to draw 'X's within a destroyed ship.
     """
     ship = sorted(opponents_ships_list_original_copy[ind])
-    for i in range(-1, 1):
+    for block in ship:
         update_dotted_and_hit_sets(
             state=state,
-            fired_block=ship[i],
+            fired_block=block,
             computer_turn=computer_turn,
             diagonal_only=False,
         )
