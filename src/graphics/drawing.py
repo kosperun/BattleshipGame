@@ -24,6 +24,14 @@ font = pygame.font.SysFont("notosans", FONT_SIZE)
 game_over_font = pygame.font.SysFont("notosans", GAME_OVER_FONT_SIZE)
 
 
+def pixel_to_grid(px: int, py: int) -> tuple:
+    return (px - LEFT_MARGIN) // BLOCK_SIZE + 1, (py - UPPER_MARGIN) // BLOCK_SIZE + 1
+
+
+def grid_to_pixel(gx: int, gy: int) -> tuple:
+    return BLOCK_SIZE * (gx - 1) + LEFT_MARGIN, BLOCK_SIZE * (gy - 1) + UPPER_MARGIN
+
+
 def draw_ships(ships_coordinates_list: list, ships_color: tuple = BLACK) -> None:
     """
     Draws rectangles around the blocks that are occupied by a ship
@@ -40,8 +48,7 @@ def draw_ships(ships_coordinates_list: list, ships_color: tuple = BLACK) -> None
         # Vertical ships
         if len(ship) > 1 and ship[0][0] == ship[1][0]:
             ship_width, ship_height = ship_height, ship_width
-        x = BLOCK_SIZE * (x_start - 1) + LEFT_MARGIN
-        y = BLOCK_SIZE * (y_start - 1) + UPPER_MARGIN
+        x, y = grid_to_pixel(x_start, y_start)
         pygame.draw.rect(screen, ships_color, ((x, y), (ship_width, ship_height)), width=BLOCK_SIZE // 10)
 
 
@@ -63,8 +70,7 @@ def draw_hit_blocks(hit_blocks_to_draw_from: set, hit_blocks_color: tuple = BLAC
     Draws 'X' in the blocks that were successfully hit either by computer or by human
     """
     for block in hit_blocks_to_draw_from:
-        x1 = BLOCK_SIZE * (block[0] - 1) + LEFT_MARGIN
-        y1 = BLOCK_SIZE * (block[1] - 1) + UPPER_MARGIN
+        x1, y1 = grid_to_pixel(block[0], block[1])
         pygame.draw.line(screen, hit_blocks_color, (x1, y1), (x1 + BLOCK_SIZE, y1 + BLOCK_SIZE), BLOCK_SIZE // 6)
         pygame.draw.line(screen, hit_blocks_color, (x1, y1 + BLOCK_SIZE), (x1 + BLOCK_SIZE, y1), BLOCK_SIZE // 6)
 

@@ -51,6 +51,7 @@ from graphics.drawing import (
     draw_ships,
     font,
     game_over_font,
+    pixel_to_grid,
     print_destroyed_ships_count,
     screen,
     show_message_at_rect_center,
@@ -188,7 +189,7 @@ def main():
                 if (LEFT_MARGIN < x < LEFT_MARGIN + 10 * BLOCK_SIZE) and (
                     UPPER_MARGIN < y < UPPER_MARGIN + 10 * BLOCK_SIZE
                 ):
-                    fired_block = ((x - LEFT_MARGIN) // BLOCK_SIZE + 1, (y - UPPER_MARGIN) // BLOCK_SIZE + 1)
+                    fired_block = pixel_to_grid(x, y)
                     computer_turn = not check_hit_or_miss(
                         fired_block=fired_block,
                         opponents_ships_list=computer_ships_working,
