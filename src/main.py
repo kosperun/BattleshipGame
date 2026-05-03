@@ -204,6 +204,7 @@ def main():
                 else:
                     show_message_at_rect_center("Your shot is outside the grid! Try again.", MESSAGE_RECT_COMPUTER)
         if computer_turn:
+            computer_just_fired = True
             fired_block = computer_shoots(state)
             computer_turn = check_hit_or_miss(
                 state=state,
@@ -224,8 +225,9 @@ def main():
         draw_ships(human_ships_to_draw)
         draw_from_dotted_set(state.dotted_set)
         draw_hit_blocks(state.hit_blocks)
-        if computer_turn:
+        if computer_just_fired:
             draw_computer_shot_with_highlight(fired_block, state.dotted_set, state.hit_blocks)
+            computer_just_fired = False
 
         if not computer.ships_set:
             show_message_at_rect_center("YOU WIN!", (0, 0, SIZE[0], SIZE[1]), game_over_font)
