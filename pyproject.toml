@@ -5,15 +5,17 @@ description = ""
 authors = ["Kostiantyn Perun <kosperun@gmail.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.8"
-pygame = "^2.1.2"
-perflint = "^0.7.3"
-ipython = "^8.4.0"
-black = "^22.6.0"
-pre-commit = "^2.20.0"
-pylint = "^2.14.5"
+python = "^3.12"
+pygame = "^2.6.1"
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
+perflint = "^0.8.1"
+ipython = "^8.39.0"
+black = "^26.3.1"
+pre-commit = "^4.6.0"
+pylint = "^3.3.0"
+pytest = "^8.3.5"
+pyyaml = "^6.0.2"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
