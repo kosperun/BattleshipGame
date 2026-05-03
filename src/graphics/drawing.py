@@ -75,6 +75,20 @@ def draw_hit_blocks(hit_blocks_to_draw_from: set, hit_blocks_color: tuple = BLAC
         pygame.draw.line(screen, hit_blocks_color, (x1, y1 + BLOCK_SIZE), (x1 + BLOCK_SIZE, y1), BLOCK_SIZE // 6)
 
 
+def draw_computer_shot_with_highlight(fired_block: tuple, dotted_set: set, hit_blocks: set) -> None:
+    """Draw only the latest computer shot in red, pause, then redraw it in black."""
+    if fired_block in hit_blocks:
+        draw_hit_blocks({fired_block}, RED)
+    else:
+        draw_from_dotted_set({fired_block}, RED)
+    pygame.display.update()
+    pygame.time.delay(600)
+    if fired_block in hit_blocks:
+        draw_hit_blocks({fired_block})
+    else:
+        draw_from_dotted_set({fired_block})
+
+
 def show_message_at_rect_center(
     message: str,
     rect: tuple,

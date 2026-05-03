@@ -38,6 +38,7 @@ from game_logic import (
 from graphics import Grid
 from graphics.button import Button
 from graphics.drawing import (
+    draw_computer_shot_with_highlight,
     draw_from_dotted_set,
     draw_hit_blocks,
     draw_ships,
@@ -215,8 +216,7 @@ def main():
                 computer=computer,
             )
 
-            draw_from_dotted_set(state.dotted_set)
-            draw_hit_blocks(state.hit_blocks)
+            draw_computer_shot_with_highlight(fired_block, state.dotted_set, state.hit_blocks)
             screen.fill(WHITE, MESSAGE_RECT_HUMAN)
             show_message_at_rect_center(
                 f"Computer's last shot: {LETTERS[fired_block[0] - 16] + str(fired_block[1])}",
