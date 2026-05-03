@@ -30,9 +30,12 @@ jobs:
 
       - name: Package as DMG
         run: |
+          mkdir -p dist/dmg
+          cp -r dist/BattleshipGame.app dist/dmg/
+          ln -s /Applications dist/dmg/Applications
           hdiutil create \
             -volname BattleshipGame \
-            -srcfolder dist/BattleshipGame.app \
+            -srcfolder dist/dmg \
             -ov -format UDZO \
             BattleshipGame.dmg
 
