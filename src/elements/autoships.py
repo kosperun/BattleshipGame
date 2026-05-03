@@ -2,6 +2,8 @@
 
 from random import choice, randint
 
+from elements.constants import GRID_SIZE, Y_MAX, Y_MIN
+
 
 class AutoShips:
     """
@@ -58,7 +60,7 @@ class AutoShips:
         ships (list of lists): list of all individual ships (as lists)"""
 
         self.offset = offset
-        self.available_blocks = {(x, y) for x in range(1 + self.offset, 11 + self.offset) for y in range(1, 11)}
+        self.available_blocks = {(x, y) for x in range(1 + self.offset, GRID_SIZE + 1 + self.offset) for y in range(Y_MIN, Y_MAX + 1)}
         self.ships_set = set()
         self.ships = self.__populate_grid()
         self.orientation = None
@@ -159,7 +161,7 @@ class AutoShips:
         for elem in new_ship:
             for k in range(-1, 2):
                 for m in range(-1, 2):
-                    if self.offset < (elem[0] + k) < 11 + self.offset and 0 < (elem[1] + m) < 11:
+                    if self.offset < (elem[0] + k) < GRID_SIZE + 1 + self.offset and Y_MIN - 1 < (elem[1] + m) < Y_MAX + 1:
                         self.available_blocks.discard((elem[0] + k, elem[1] + m))
 
     def __populate_grid(self) -> list:

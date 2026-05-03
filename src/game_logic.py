@@ -4,9 +4,10 @@ from random import choice
 from typing import Callable
 
 from elements.autoships import AutoShips
+from elements.constants import COMPUTER_X_MAX, COMPUTER_X_MIN, Y_MAX, Y_MIN
 
 # ---COMPUTER DATA-----
-computer_available_to_fire_set = {(x, y) for x in range(16, 26) for y in range(1, 11)}
+computer_available_to_fire_set = {(x, y) for x in range(COMPUTER_X_MIN, COMPUTER_X_MAX + 1) for y in range(Y_MIN, Y_MAX + 1)}
 around_last_computer_hit_set = set()
 
 dotted_set_for_computer_not_to_shoot = set()
@@ -30,7 +31,7 @@ def computer_shoots() -> tuple:
     # when all the ships and blocks variables are re-initialized but computer_available_to_fire_set is not.
     global computer_available_to_fire_set
     if not computer_available_to_fire_set:
-        computer_available_to_fire_set = {(x, y) for x in range(16, 26) for y in range(1, 11)}
+        computer_available_to_fire_set = {(x, y) for x in range(COMPUTER_X_MIN, COMPUTER_X_MAX + 1) for y in range(Y_MIN, Y_MAX + 1)}
 
     set_to_shoot_from = computer_available_to_fire_set
     if around_last_computer_hit_set:
@@ -162,13 +163,13 @@ def computer_first_hit(*, fired_block: tuple) -> None:
         fired_block (tuple): coordinates of a block hit by computer
     """
     x_hit, y_hit = fired_block
-    if x_hit > 16:
+    if x_hit > COMPUTER_X_MIN:
         around_last_computer_hit_set.add((x_hit - 1, y_hit))
-    if x_hit < 25:
+    if x_hit < COMPUTER_X_MAX:
         around_last_computer_hit_set.add((x_hit + 1, y_hit))
-    if y_hit > 1:
+    if y_hit > Y_MIN:
         around_last_computer_hit_set.add((x_hit, y_hit - 1))
-    if y_hit < 10:
+    if y_hit < Y_MAX:
         around_last_computer_hit_set.add((x_hit, y_hit + 1))
 
 
@@ -188,14 +189,14 @@ def computer_hits_twice() -> set:
         y1 = last_hits_list[i][1]
         y2 = last_hits_list[i + 1][1]
         if x1 == x2:
-            if y1 > 1:
+            if y1 > Y_MIN:
                 new_around_last_hit_set.add((x1, y1 - 1))
-            if y2 < 10:
+            if y2 < Y_MAX:
                 new_around_last_hit_set.add((x1, y2 + 1))
         elif y1 == y2:
-            if x1 > 16:
+            if x1 > COMPUTER_X_MIN:
                 new_around_last_hit_set.add((x1 - 1, y1))
-            if x2 < 25:
+            if x2 < COMPUTER_X_MAX:
                 new_around_last_hit_set.add((x2 + 1, y1))
     return new_around_last_hit_set
 
@@ -223,7 +224,7 @@ def update_dotted_and_hit_sets(
     # Adds blocks in diagonal or all-around a block to respective sets
     for i in range(-1, 2):
         for j in range(-1, 2):
-            if (not diagonal_only or (i != 0 and j != 0)) and x_min < x + i < x_max and 0 < y + j < 11:
+            if (not diagonal_only or (i != 0 and j != 0)) and x_min < x + i < x_max and Y_MIN - 1 < y + j < Y_MAX + 1:
                 add_missed_block_to_dotted_set(fired_block=(x + i, y + j))
     dotted_set -= hit_blocks
 

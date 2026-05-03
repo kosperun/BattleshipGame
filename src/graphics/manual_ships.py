@@ -4,10 +4,14 @@ import pygame
 
 from elements.constants import (
     BLOCK_SIZE,
+    COMPUTER_X_MAX,
+    COMPUTER_X_MIN,
     LEFT_MARGIN,
     RECT_FOR_MESSAGES_AND_BUTTONS,
     UPPER_MARGIN,
     WHITE,
+    Y_MAX,
+    Y_MIN,
 )
 from game_logic import is_ship_valid, update_used_blocks, validate_ships_numbers
 from graphics.drawing import screen, show_message_at_rect_center
@@ -31,7 +35,8 @@ def manually_create_new_ship(
     if start_block > end_block:
         start_block, end_block = end_block, start_block
     temp_ship = []
-    if 15 < start_block[0] < 26 and 0 < start_block[1] < 11 and 15 < end_block[0] < 26 and 0 < end_block[1] < 11:
+    if (COMPUTER_X_MIN <= start_block[0] <= COMPUTER_X_MAX and Y_MIN <= start_block[1] <= Y_MAX
+            and COMPUTER_X_MIN <= end_block[0] <= COMPUTER_X_MAX and Y_MIN <= end_block[1] <= Y_MAX):
         temp_ship = create_new_ship(start_block, end_block)
     else:
         show_message_at_rect_center("SHIP IS BEYOND YOUR GRID! Try again!", RECT_FOR_MESSAGES_AND_BUTTONS)

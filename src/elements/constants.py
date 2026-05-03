@@ -7,6 +7,14 @@ GREEN_BLUE = (0, 153, 153)
 LIGHT_GRAY = (192, 192, 192)
 RED = (255, 0, 0)
 
+# Grid boundaries (grid is 10x10; computer x-offset is 15)
+GRID_SIZE = 10
+COMPUTER_X_OFFSET = 15
+COMPUTER_X_MIN = COMPUTER_X_OFFSET + 1       # 16
+COMPUTER_X_MAX = COMPUTER_X_OFFSET + GRID_SIZE  # 25
+Y_MIN = 1
+Y_MAX = GRID_SIZE                             # 10
+
 # Measures
 BLOCK_SIZE = 50
 LEFT_MARGIN = 5 * BLOCK_SIZE
