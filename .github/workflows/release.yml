@@ -1,0 +1,126 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build-macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
+        run: |
+          pip install pygame pyinstaller
+
+      - name: Build app bundle
+        run: |
+          pyinstaller \
+            --name BattleshipGame \
+            --windowed \
+            --paths src \
+            --add-data "src/media:media" \
+            src/main.py
+
+      - name: Package as DMG
+        run: |
+          hdiutil create \
+            -volname BattleshipGame \
+            -srcfolder dist/BattleshipGame.app \
+            -ov -format UDZO \
+            BattleshipGame.dmg
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: macos-dmg
+          path: BattleshipGame.dmg
+
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
+        run: pip install pygame pyinstaller
+
+      - name: Build exe
+        run: |
+          pyinstaller `
+            --name BattleshipGame `
+            --windowed `
+            --paths src `
+            --add-data "src/media;media" `
+            src/main.py
+
+      - name: Zip exe
+        run: Compress-Archive -Path dist\BattleshipGame -DestinationPath BattleshipGame-windows.zip
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windows-zip
+          path: BattleshipGame-windows.zip
+
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev \
+            libfreetype6-dev
+
+      - name: Install dependencies
+        run: pip install pygame pyinstaller
+
+      - name: Build binary
+        run: |
+          pyinstaller \
+            --name BattleshipGame \
+            --windowed \
+            --paths src \
+            --add-data "src/media:media" \
+            src/main.py
+
+      - name: Package as tar.gz
+        run: tar -czf BattleshipGame-linux.tar.gz -C dist BattleshipGame
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: linux-targz
+          path: BattleshipGame-linux.tar.gz
+
+  release:
+    needs: [build-macos, build-windows, build-linux]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          merge-multiple: true
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            BattleshipGame.dmg
+            BattleshipGame-windows.zip
+            BattleshipGame-linux.tar.gz
+          generate_release_notes: true
