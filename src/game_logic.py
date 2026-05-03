@@ -70,10 +70,9 @@ def check_hit_or_miss(
     (in hit blocks).
     Removes destroyed ships from the list of ships.
     """
-    for elem in opponents_ships_list:
+    for ind, elem in enumerate(opponents_ships_list):
         diagonal_only = True
         if fired_block in elem:
-            ind = opponents_ships_list.index(elem)
             if len(elem) == 1:
                 diagonal_only = False
             update_dotted_and_hit_sets(

@@ -99,17 +99,18 @@ class AutoShips:
         Returns:
             list: a list of tuples with a new ship's coordinates
         """
-        ship_coordinates = []
-        x, y, self.orientation, self.direction = self.__create_start_block(available_blocks)
-        for _ in range(number_of_blocks):
-            ship_coordinates.append((x, y))
-            if not self.orientation:
-                self.direction, x = self.__get_new_block_for_ship(x, self.direction, self.orientation, ship_coordinates)
-            else:
-                self.direction, y = self.__get_new_block_for_ship(y, self.direction, self.orientation, ship_coordinates)
-        if self.__is_ship_valid(ship_coordinates):
-            return ship_coordinates
-        return self.__create_ship(number_of_blocks, available_blocks)
+        for _ in range(1000):
+            ship_coordinates = []
+            x, y, self.orientation, self.direction = self.__create_start_block(available_blocks)
+            for _ in range(number_of_blocks):
+                ship_coordinates.append((x, y))
+                if not self.orientation:
+                    self.direction, x = self.__get_new_block_for_ship(x, self.direction, self.orientation, ship_coordinates)
+                else:
+                    self.direction, y = self.__get_new_block_for_ship(y, self.direction, self.orientation, ship_coordinates)
+            if self.__is_ship_valid(ship_coordinates):
+                return ship_coordinates
+        raise RuntimeError(f"Could not place a {number_of_blocks}-block ship after 1000 attempts")
 
     def __get_new_block_for_ship(self, coor: int, direction: int, orientation: int, ship_coordinates: list) -> tuple:
         """

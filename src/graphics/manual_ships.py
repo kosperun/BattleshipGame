@@ -36,7 +36,7 @@ def manually_create_new_ship(
             and COMPUTER_X_MIN <= end_block[0] <= COMPUTER_X_MAX and Y_MIN <= end_block[1] <= Y_MAX):
         temp_ship = create_new_ship(start_block, end_block)
     else:
-        show_message_at_rect_center("SHIP IS BEYOND YOUR GRID! Try again!", RECT_FOR_MESSAGES_AND_BUTTONS)
+        show_message_at_rect_center("Ship is outside your grid! Try again.", RECT_FOR_MESSAGES_AND_BUTTONS)
     if temp_ship:
         validate_and_save_new_ship(
             human_ships_to_draw, human_ships_set, used_blocks_for_manual_drawing, num_ships_list, temp_ship
@@ -55,10 +55,10 @@ def validate_and_save_new_ship(
             update_used_blocks(ship=temp_ship, method=used_blocks_for_manual_drawing.add)
         else:
             show_message_at_rect_center(
-                f"There already are enough of {len(temp_ship)} ships!", RECT_FOR_MESSAGES_AND_BUTTONS
+                f"You already have enough {len(temp_ship)}-block ships!", RECT_FOR_MESSAGES_AND_BUTTONS
             )
     else:
-        show_message_at_rect_center("SHIPS ARE TOUCHING! Try again", RECT_FOR_MESSAGES_AND_BUTTONS)
+        show_message_at_rect_center("Ships are touching! Try again.", RECT_FOR_MESSAGES_AND_BUTTONS)
 
 
 def create_new_ship(start_block, end_block):
@@ -71,5 +71,5 @@ def create_new_ship(start_block, end_block):
         for block in range(start_block[0], end_block[0] + 1):
             temp_ship.append((block, start_block[1]))
     else:
-        show_message_at_rect_center("SHIP IS TOO LARGE! Try again!", RECT_FOR_MESSAGES_AND_BUTTONS)
+        show_message_at_rect_center("Ship is too large! Try again.", RECT_FOR_MESSAGES_AND_BUTTONS)
     return temp_ship

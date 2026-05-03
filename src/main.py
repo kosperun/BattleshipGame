@@ -203,7 +203,7 @@ def main():
                         MESSAGE_RECT_COMPUTER,
                     )
                 else:
-                    show_message_at_rect_center("Your shot is outside of grid! Try again", MESSAGE_RECT_COMPUTER)
+                    show_message_at_rect_center("Your shot is outside the grid! Try again.", MESSAGE_RECT_COMPUTER)
         if computer_turn:
             fired_block = computer_shoots(state)
             computer_turn = check_hit_or_miss(
