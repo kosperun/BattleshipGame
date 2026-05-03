@@ -30,17 +30,9 @@ from elements.constants import (
     Y_OFFSET_FOR_SHIPS_COUNT,
 )
 from game_logic import (
-    around_last_computer_hit_set,
+    GameState,
     check_hit_or_miss,
-    computer_destroyed_ships_count,
     computer_shoots,
-    destroyed_computer_ships,
-    dotted_set,
-    dotted_set_for_computer_not_to_shoot,
-    hit_blocks,
-    hit_blocks_for_computer_not_to_shoot,
-    human_destroyed_ships_count,
-    last_hits_list,
     update_used_blocks,
 )
 from graphics import Grid
@@ -67,6 +59,8 @@ def main():
     - game loop
     - exit from the game
     """
+    state = GameState()
+
     ships_creation_not_decided = True
     ships_not_created = True
     drawing = False
@@ -178,7 +172,7 @@ def main():
     while not game_over:
         screen.fill(WHITE, RECT_FOR_HUMAN_SHIPS_COUNT)
         screen.fill(WHITE, RECT_FOR_COMPUTER_SHIPS_COUNT)
-        if not dotted_set | hit_blocks:
+        if not state.dotted_set | state.hit_blocks:
             show_message_at_rect_center("GAME STARTED! YOUR MOVE!", MESSAGE_RECT_COMPUTER)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -191,6 +185,7 @@ def main():
                 ):
                     fired_block = pixel_to_grid(x, y)
                     computer_turn = not check_hit_or_miss(
+                        state=state,
                         fired_block=fired_block,
                         opponents_ships_list=computer_ships_working,
                         computer_turn=False,
@@ -199,8 +194,8 @@ def main():
                         computer=computer,
                     )
 
-                    draw_from_dotted_set(dotted_set)
-                    draw_hit_blocks(hit_blocks)
+                    draw_from_dotted_set(state.dotted_set)
+                    draw_hit_blocks(state.hit_blocks)
                     screen.fill(WHITE, MESSAGE_RECT_COMPUTER)
                     show_message_at_rect_center(
                         f"Your last shot: {LETTERS[fired_block[0]-1] + str(fired_block[1])}",
@@ -209,8 +204,9 @@ def main():
                 else:
                     show_message_at_rect_center("Your shot is outside of grid! Try again", MESSAGE_RECT_COMPUTER)
         if computer_turn:
-            fired_block = computer_shoots()
+            fired_block = computer_shoots(state)
             computer_turn = check_hit_or_miss(
+                state=state,
                 fired_block=fired_block,
                 opponents_ships_list=human_ships_working,
                 computer_turn=True,
@@ -219,14 +215,14 @@ def main():
                 computer=computer,
             )
 
-            draw_from_dotted_set(dotted_set)
-            draw_hit_blocks(hit_blocks)
+            draw_from_dotted_set(state.dotted_set)
+            draw_hit_blocks(state.hit_blocks)
             screen.fill(WHITE, MESSAGE_RECT_HUMAN)
             show_message_at_rect_center(
                 f"Computer's last shot: {LETTERS[fired_block[0] - 16] + str(fired_block[1])}",
                 MESSAGE_RECT_HUMAN,
             )
-        draw_ships(destroyed_computer_ships)
+        draw_ships(state.destroyed_computer_ships)
         draw_ships(human_ships_to_draw)
 
         if not computer.ships_set:
@@ -237,10 +233,10 @@ def main():
             game_over = True
 
         print_destroyed_ships_count(
-            X_OFFSET_FOR_HUMAN_SHIPS_COUNT, Y_OFFSET_FOR_SHIPS_COUNT, human_destroyed_ships_count, font
+            X_OFFSET_FOR_HUMAN_SHIPS_COUNT, Y_OFFSET_FOR_SHIPS_COUNT, state.human_destroyed_ships_count, font
         )
         print_destroyed_ships_count(
-            X_OFFSET_FOR_COMPUTER_SHIPS_COUNT, Y_OFFSET_FOR_SHIPS_COUNT, computer_destroyed_ships_count, font
+            X_OFFSET_FOR_COMPUTER_SHIPS_COUNT, Y_OFFSET_FOR_SHIPS_COUNT, state.computer_destroyed_ships_count, font
         )
         pygame.display.update()
 
@@ -258,13 +254,7 @@ def main():
                 pygame.quit()
                 sys.exit()
             elif event.type == pygame.MOUSEBUTTONDOWN and play_again_button.rect.collidepoint(mouse):
-                around_last_computer_hit_set.clear()
-                dotted_set_for_computer_not_to_shoot.clear()
-                hit_blocks_for_computer_not_to_shoot.clear()
-                last_hits_list.clear()
-                hit_blocks.clear()
-                dotted_set.clear()
-                destroyed_computer_ships.clear()
+                state.reset()
                 main()
             elif event.type == pygame.MOUSEBUTTONDOWN and quit_game_button.rect.collidepoint(mouse):
                 pygame.quit()
